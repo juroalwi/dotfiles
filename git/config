@@ -1,0 +1,13 @@
+[credential]
+  helper = cache --timeout=36000000
+
+; Default account credentials.
+[user]
+	name=Julian Alvarez
+  email=juroalwi@gmail.com
+[core]
+  sshCommand = "ssh -i ~/.ssh/id_rsa.julian"
+
+; Xepelin credentials.
+[includeIf "gitdir:~/Desktop/xepelin/**"]
+  path = ~/Desktop/xepelin/.gitconfig
