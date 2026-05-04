@@ -1,0 +1,24 @@
+{
+  "name": "poi-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": "all",
+        "path": "./global.json"
+      },
+      {
+        "language": "python",
+        "path": "./python.json"
+      },
+      {
+        "language": [
+          "javascript",
+          "typescript",
+          "javascriptreact",
+          "typescriptreact"
+        ],
+        "path": "./javascript.json"
+      }
+    ]
+  }
+}

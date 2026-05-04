@@ -1,0 +1,30 @@
+{
+  "console.log": {
+    "prefix": "cl",
+    "body": "console.log('$1', $2);$0"
+  },
+  "setTimeout": {
+    "prefix": "st",
+    "body": "setTimeout(() => {\n\t${1}\n});$0"
+  },
+  "setInterval": {
+    "prefix": "si",
+    "body": "setInterval(() => {\n\t${1}\n});$0"
+  },
+  "await Promise.all": {
+    "prefix": "apa",
+    "body": "await Promise.all(${1:promise});$0"
+  },
+  "await Promise.all with destructuring": {
+    "prefix": "apad",
+    "body": "const [${1:value1}, ${2:value2}] = await Promise.all(${3:promises});$0"
+  },
+  "await Promise.all map": {
+    "prefix": "apam",
+    "body": "await Promise.all(${1:promises}.map(async (${2:value}) => {\n\t${3}\n}));$0"
+  },
+  "Promise.all": {
+    "prefix": "pa",
+    "body": "Promise.all(${1:promise});$0"
+  }
+}

@@ -1,0 +1,1092 @@
+# Contextos
+
+# global !p
+# def math():
+#     return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+# endglobal
+
+# global !p
+# texMathZones = ['texMathZone'+x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'V', 'W', 'X', 'Y', 'Z']]
+# texIgnoreMathZones = ['texMathText']
+# texMathZoneIds = vim.eval('map('+str(texMathZones)+", 'hlID(v:val)')")
+# texIgnoreMathZoneIds = vim.eval('map('+str(texIgnoreMathZones)+", 'hlID(v:val)')")
+#
+# def math():
+#     synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
+#     if not set(texIgnoreMathZoneIds).isdisjoint(synstackids):
+#         return False
+#     return not set(texMathZoneIds).isdisjoint(synstackids)
+# endglobal
+
+global !p
+texMathZones = ['texMathZone' + x for x in ['', 'X', 'XX', 'Env', 'EnvStarred',
+'Ensured']]
+
+texIgnoreMathZones = ['texMathText']
+
+texMathZoneIds = vim.eval('map('+str(texMathZones)+", 'hlID(v:val)')")
+
+texIgnoreMathZoneIds = vim.eval('map('+str(texIgnoreMathZones)+", 'hlID(v:val)')")
+
+ignore = texIgnoreMathZoneIds[0]
+
+
+def math():
+	synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
+	try:
+		first = next(i for i in reversed(synstackids) if i in texIgnoreMathZoneIds or i in texMathZoneIds)
+		return first != ignore
+	except StopIteration:
+		return False
+endglobal
+######################################################################
+
+# Snippets
+
+# Entornos
+
+snippet mydc "Set 'mydocumentclass' class" b
+\documentclass{mydocumentclass}
+
+$0
+endsnippet
+
+snippet "begend" "New enviroment" rb
+\begin{$1}
+${2:${VISUAL}}
+\end{$1}$0
+endsnippet
+
+snippet document "Document enviroment" b
+\begin{document}
+
+$0
+
+\newpage
+
+\end{document}
+endsnippet
+
+snippet ii "Inline math" wA  
+\( ${1:${VISUAL}} \)$0
+endsnippet
+
+snippet dd "Display math" wA
+\[
+${1:${VISUAL}}
+\]$0
+endsnippet
+
+snippet i "List item" b
+\item $0
+endsnippet
+
+snippet ul "Unordered list" b 
+\begin{itemize}
+\item ${1:${VISUAL}}
+\end{itemize}$0
+endsnippet
+
+snippet ol "Ordered list" b 
+\begin{enumerate}
+\item ${1:${VISUAL}}
+\end{enumerate}$0
+endsnippet
+
+snippet al "Alphabetic list (requires enumitem package)" b 
+\begin{enumerate}[label = \alph*\,.]
+\item ${1:${VISUAL}}
+\end{enumerate}$0
+endsnippet
+
+snippet rl "Roman list (requires enumitem package)" b 
+\begin{enumerate}[label = \roman*\,.]
+\item ${1:${VISUAL}}
+\end{enumerate}$0
+endsnippet
+
+snippet resume "Resume list (requires enumitem package)" b 
+\begin{enumerate}[resume]
+\item ${1:${VISUAL}}
+\end{enumerate}$0
+endsnippet
+
+context "math()"
+snippet cases "Cases" iA
+\begin{cases}
+${1:${VISUAL}}
+\end{cases}$0
+endsnippet
+
+priority 1
+context "math()"
+snippet ovBB "Top brace (requires amsmath)" iA
+\overbrace{${1:${VISUAL}}}^{$2}$0
+endsnippet
+
+context "math()"
+snippet unBB "Bottom brace (requires amsmath)" iA
+\underbrace{${1:${VISUAL}}}_{$2}$0
+endsnippet
+priority 0
+
+# snippet s1 "Section title" b
+# \section{${1:${VISUAL}}}$0
+# endsnippet
+
+snippet s1 "Unnumbered section title" b
+\section*{${1:${VISUAL}}}$0
+endsnippet
+
+# snippet s2 "Subsection title" b
+# \subsection{${1:${VISUAL}}}$0
+# endsnippet
+
+snippet s2 "Unnumbered subsection title" b
+\subsection*{${1:${VISUAL}}}$0
+endsnippet
+
+# snippet s3 "Subsubsection title" b
+# \subsubsection{${1:${VISUAL}}}$0
+# endsnippet
+
+snippet s3 "Unnumbered subsubsection title" b
+\subsubsection*{${1:${VISUAL}}}$0
+endsnippet
+
+snippet "lesson(\d\d?)" "Generar título para la correspondiente clase" rb
+\setcounter{lessoncounter}{`!p snip.rv = match.group(1)`}
+\subsection*{\Large Clase `!p snip.rv = match.group(1)`}$0
+endsnippet
+
+snippet "unit(\d\d?)" "Generar título para la correspondiente unidad" rb
+\renewcommand{\unittitle}{$1}
+\setcounter{section}{`!p snip.rv = match.group(1)`}
+\addcontentsline{toc}{section}{\thesection. $1}
+\section*{Unidad \thesection: \\\\ \Huge $1}$0
+endsnippet
+
+snippet summary "Generar título para el resumen de la unidad" b
+\newpage
+
+\subsection*{\LARGE Resumen}$0
+endsnippet
+
+snippet exercises "Generar título para los ejercicios de la unidad"
+\newpage
+
+\subsection*{\LARGE Ejercicios}$0
+endsnippet
+
+snippet title "Crear título" b
+\title{\textbf{\Huge{$1}}}
+\author{$2} 
+\date{$3}
+\maketitle
+\thispagestyle{mypagestyle}$0
+endsnippet 
+
+snippet theorem "Insertar teorema" b
+\begin{theorem}[$1]
+$2
+\end{theorem}$0
+endsnippet
+
+snippet proposition "Insertar proposición" b
+\begin{proposition}[$1]
+$2
+\end{proposition}$0
+endsnippet
+
+snippet lemma "Insertar lema" b
+\begin{lemma}[$1]
+$2
+\end{lemma}$0
+endsnippet
+
+snippet corollary "Insertar corolario" b
+\begin{corollary}
+$1
+\end{corollary}$0
+endsnippet
+
+snippet definition "Insertar definición" b
+\begin{definition}
+$1
+\end{definition}$0
+endsnippet
+
+snippet example "Insertar ejemplo" b
+\begin{example}
+$1
+\end{example}$0
+endsnippet
+
+snippet exercise "Insertar ejercicio" b
+\begin{exercise}
+$1
+\end{exercise}$0
+endsnippet
+
+snippet remark "Insertar observación" b
+\begin{remark}
+$1
+\end{remark}$0
+endsnippet
+
+snippet proof "Insertar demostración" b
+\begin{PROOF*}
+$1
+\end{PROOF*}$0
+endsnippet
+
+snippet bq "begin questions" b
+\begin{questions}
+\question % Ejercicio $1.
+\end{questions}$0
+endsnippet
+
+snippet q "Question" b
+\question % Ejercicio $0.
+endsnippet
+
+snippet bp "Begin parts" b
+\begin{parts}
+\part % Ejercicio $1.
+\end{parts}$0
+endsnippet
+
+snippet p "Part" b
+\part % Ejercicio $0.
+endsnippet
+
+snippet bsp "Begin subparts" b
+\begin{subparts}
+\subpart % Ejercicio $1.
+\end{subparts}$0
+endsnippet
+
+snippet sp "Subpart" b
+\subpart % Ejercicio $0.
+endsnippet
+
+snippet bssp "Begin subsubparts" b
+\begin{subsubparts}
+\subsubpart % Ejercicio $1.
+\end{subsubparts}$0
+endsnippet
+
+snippet ssp "Subsubparts" b
+\subsubpart % Ejercicio $0.
+endsnippet
+
+snippet bs "Begin solution" b
+\begin{solution} % Solución (ejercicio $1).
+$2
+\end{solution}$0
+endsnippet
+
+# Operaciones
+
+context "math()"
+snippet ff "Fracción con ${VISUAL} en el numerador" iA
+\frac{${1:${VISUAL}}}{$2}$0
+endsnippet
+
+context "math()"
+snippet sr "Raíz cuadrada (square root)" iA
+\sqrt{${1:2}}$0
+endsnippet
+
+context "math()"
+snippet +- "Plus minus" iA
+\pm $0
+endsnippet
+
+context "math()"
+snippet -+ "Minus plus" iA
+\mp $0
+endsnippet
+
+context "math()"
+snippet circ "Composición de funciones" iA
+\circ $0
+endsnippet
+
+context "math()" 
+snippet binom "Binomial coefficient" iA
+\binom{$1}{$2}$0
+endsnippet
+
+context "math()"
+snippet sbst "Break line inside operator index definition" iA
+\substack{${1:${VISUAL}} \\ $2}$0
+endsnippet
+
+context "math()"
+snippet uu "Unión" iA
+\cup $0
+endsnippet
+
+context "math()"
+snippet UU "Unión múltiple" iA
+\bigcup_{${1:n}=${2:1}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet ii "Intersección" iA
+\cap $0
+endsnippet
+
+context "math()"
+snippet II "Intersección múltiple" iA
+\bigcap_{${1:n}=${2:1}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet xx "Producto cruz" iA
+\times $0
+endsnippet
+
+context "math()"
+snippet XX "Multiple cartesian product" iA
+\bigtimes_{${1:n}=${2:1}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet sum "Sumatoria" iA
+\sum_{${1:n}=${2:1}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet prod "Productoria" iA
+\prod_{${1:n}=${2:1}}^{${3:\infty}}$0
+endsnippet
+
+context "math()"
+snippet lim "Limite" iA 
+\lim_{${1:n} \to ${2:\infty}}$0
+endsnippet
+
+priority 1
+context "math()"
+snippet suplim "Límite superior" iA
+\limsup_{${1:n} \to ${2:\infty}}$0
+endsnippet
+
+context "math()"
+snippet inflim "Límite inferior" iA
+\liminf_{${1:n} \to ${2:\infty}}$0
+endsnippet
+priority 0
+
+context "math()"
+snippet der "Partial derivative" iA
+\frac{d${1:f}}{d${2:x}}$0
+endsnippet
+
+priority 1
+context "math()"
+snippet pder "Derivada parcial" iA
+\frac{\partial ${1:f}}{\partial ${2:x}}$0
+endsnippet
+priority 0
+
+context "math()"
+snippet par "Partial diferential" iA
+\partial $0
+endsnippet
+
+context "math()"
+snippet int "Integral iterada" iA
+\int_{${1:-\infty}}^{${2:\infty}}$0
+endsnippet
+
+priority 1
+context "math()"
+snippet uint "Upper integral" iA
+\uint_{${1:-\infty}}^{${2:\infty}}$0
+endsnippet
+
+context "math()"
+snippet lint "Lower integral" iA
+\lint_{${1:-\infty}}^{${2:\infty}}$0
+endsnippet
+
+context "math()"
+snippet sint "Integral simple" iA
+\int_{$1}$0
+endsnippet
+
+context "math()"
+snippet dint "Integral doble" iA
+\iint_{$1}$0
+endsnippet
+
+context "math()"
+snippet tint "Integral triple" iA
+\iiint_{$1}$0
+endsnippet
+priority 0
+
+context "math()"
+snippet grad "Gradiente" iA
+\nabla $0
+endsnippet
+
+# Subíndices y superíndices
+
+context "math()"
+snippet sb "Subscript" iA
+_{$1}$0
+endsnippet
+
+context "math()"
+snippet "([A-Za-z])(\d)" "One digit subscript" riA
+`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`}$0
+endsnippet
+
+context "math()"
+snippet "([A-Za-z])_{(\d)}(\d)" "Two digits subscript" riA
+`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)``!p snip.rv= match.group(3)`}$0
+endsnippet
+
+context "math()"
+snippet "(([A-Za-z]|\d)((\+|-|\/)([A-Za-z]|\d))?)¿" "Quick subscript" riA
+_{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet sp "Superscript" iA
+^{$1}$0
+endsnippet
+
+context "math()"
+snippet "(([A-Za-z]|\d)((\+|-|\/)([A-Za-z]|\d))?)\?" "Quick superscript" riA
+^{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet inve "Elevar a la menos uno" iA
+^{-1}$0
+endsnippet
+
+context "math()"
+snippet sq "Elevar al cuadrado (square)" iA
+^{2}$0
+endsnippet
+
+context "math()"
+snippet cu "Elevar al cubo" iA
+^{3}$0
+endsnippet
+
+context "math()"
+snippet comp "Complemento" iA
+^{c}$0
+endsnippet
+
+# Símbolos y notación
+
+context "math()"
+snippet oo "Infinito" iA
+\infty $0
+endsnippet
+
+context "math()"
+snippet OO "Conjunto vacío" iA
+\emptyset $0
+endsnippet
+
+context "math()"
+snippet bar "Bar" iA
+\bar{$1}$0
+endsnippet
+
+priority 1
+context "math()"
+snippet ubar "Under bar" iA
+\underbar{$1}$0
+endsnippet
+priority 0
+
+context "math()"
+snippet vec "Vector" iA
+\vec{$1}$0
+endsnippet
+
+context "math()"
+snippet til "Tilde" iA
+\tilde{$1}$0
+endsnippet
+
+context "math()"
+snippet hat "Hat" iA
+\hat{$1}$0
+endsnippet
+
+priority 1
+context "math()"
+snippet "([A-Za-z])bar" "Quick bar" riA
+\bar{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet "([A-Za-z])ubar" "Quick under bar" riA
+\underbar{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet "([A-Za-z])vec" "Quick vector" riA
+\vec{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet "([A-Za-z])til" "Quick tilde" riA
+\tilde{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet "([A-Za-z])hat" "Quick hat" riA
+\hat{`!p snip.rv = match.group(1)`}$0
+endsnippet
+priority 0
+
+context "math()"
+snippet EE "cuantificador existencial" iA
+\exists $0
+endsnippet
+
+context "math()"
+snippet AA "Cuantificador universal" iA
+\forall $0
+endsnippet
+
+# Relaciones
+
+context "math()"
+snippet => "Implica" iA
+\implies $0
+endsnippet
+
+context "math()"
+snippet =< "Implicado" iA
+\impliedby $0
+endsnippet
+
+context "math()"
+snippet <> "Equivalencia" iA
+\iff $0
+endsnippet
+
+context "math()"
+snippet -> "Flecha derecha" iA
+\rightarrow $0
+endsnippet
+
+context "math()"
+snippet -< "Flecha izquierda" iA
+\leftarrow $0
+endsnippet
+
+priority 1
+context "math()"
+snippet text-> "Right arrow with text" iA
+\xrightarrow[$1]{$2}$0
+endsnippet
+
+context "math()"
+snippet text-< "Left arrow with text" iA
+\xleftarrow[$1]{$2}$0
+endsnippet
+priority 0
+
+priority 1
+context "math()"
+snippet 45-> "Flecha derecha ascendente" iA
+\shortarrow{1}$0
+endsnippet
+
+priority 2
+context "math()"
+snippet -45-> "Flecha derecha descendente" iA
+\shortarrow{7}$0
+endsnippet
+priority 0
+
+context "math()"
+snippet mpto "Flecha con cola" iA 
+\mapsto $0
+endsnippet
+
+context "math()"
+snippet >= "Mayor o igual" iA
+\geq $0
+endsnippet
+
+context "math()"
+snippet <= "Menor o igual" iA
+\leq $0
+endsnippet
+
+context "math()"
+snippet >> "Mucho mayor" iA
+\gg $0
+endsnippet
+
+context "math()"
+snippet << "Mucho menor" iA
+\ll $0
+endsnippet
+
+context "math()"
+snippet == "Equivalent" iA
+\equiv $0
+endsnippet
+
+context "math()"
+snippet ~~ "Similar" iA
+\sim $0
+endsnippet
+
+context "math()"
+snippet cc "Contenido o igual" iA
+\subseteq $0
+endsnippet 
+
+context "math()"
+snippet Cc "Contenido" iA
+\subset $0
+endsnippet
+
+priority 1
+context "math()"
+snippet <cc "Contiene o igual" iA
+\supseteq $0
+endsnippet
+
+context "math()"
+snippet <Cc "Contiene" iA
+\supset $0
+endsnippet
+priority 0
+
+context "math()"
+snippet ee "Pertenece" iA
+\in $0
+endsnippet
+
+context "math()"
+snippet !! "Negar relación" iA
+\centernot $0
+endsnippet
+
+# Separadores 
+
+context "math()"
+snippet  "\s\s" "Espacio en blanco" riA
+\; $0
+endsnippet
+
+# context "math()"
+# snippet "qq"  "Espacio en blanco" ri
+# \qquad $0
+# endsnippet
+
+context "math()"
+snippet pp "Parenthesis" iA
+($1)$0
+endsnippet
+
+context "math()"
+snippet bb "Brackets" iA
+[$1]$0
+endsnippet
+
+context "math()"
+snippet BB "Braces" iA
+\\{ $1 \\}$0
+endsnippet
+
+context "math()"
+snippet || "Single pipe" iA
+\mid $0
+endsnippet
+
+priority 1
+context "math()"
+snippet !| "Negated single pipe" iA
+\nmid $0
+endsnippet
+priority 0
+
+context "math()"
+snippet vv "Pipe" iA
+|$1|$0
+endsnippet
+
+context "math()"
+snippet VV "Double pipes" iA
+\| $1 \|$0
+endsnippet
+
+context "math()"
+snippet ng "Angle brackets" iA
+\langle $1 \rangle $0
+endsnippet
+
+context "math()"
+snippet leri "Left and right." iA
+\left $1 \right $0
+endsnippet
+
+context "math()"
+snippet lrp "Parenthesis (size adjusted)" iA
+\left( ${1:${VISUAL}} \right)$0
+endsnippet
+
+context "math()"
+snippet lrb "Brackets (size adjusted)" iA
+\left[ ${1:${VISUAL}} \right]$0
+endsnippet
+
+context "math()"
+snippet lrB "Braces (size adjusted)" iA
+\left\\{ ${1:${VISUAL}} \right\\}$0
+endsnippet
+
+context "math()"
+snippet lrv "Pipes (size adjusted)" iA
+\left| ${1:${VISUAL}} \right|$0
+endsnippet
+
+context "math()"
+snippet lrV "Double pipes (size adjusted)" iA
+\left\lVert ${1:${VISUAL}} \right\rVert $0
+endsnippet
+
+priority 1
+context "math()"
+snippet lrng "Angle brackets (size adjusted)" iA
+\left\langle ${1:${VISUAL}} \right\rangle $0
+endsnippet
+priority 0
+
+# Letras griegas
+
+context "math()"
+snippet á "Alpha lower case" iA
+\alpha $0
+endsnippet
+
+context "math()"
+snippet ´b "Beta lower case" iA
+\beta $0
+endsnippet
+
+context "math()"
+snippet ǵ "Gamma lower case" iA
+\gamma $0
+endsnippet
+
+context "math()"
+snippet Ǵ "Gamma upper case" iA
+\Gamma $0
+endsnippet
+
+context "math()"
+snippet ´d "Delta lower case" iA
+\delta $0
+endsnippet
+
+context "math()"
+snippet ´D "Delta upper case" iA
+\Delta $0
+endsnippet
+
+context "math()"
+snippet é "Épsilon lower case" iA
+\epsilon $0
+endsnippet
+
+context "math()"
+snippet ź "Zeta lower case" iA
+\zeta $0
+endsnippet
+
+context "math()"
+snippet ´h "Eta lower case" iA
+\eta $0
+endsnippet
+
+context "math()"
+snippet ´q "Theta lower case" iA
+\theta $0
+endsnippet
+
+context "math()"
+snippet ´Q "Theta upper case" iA
+\Theta $0
+endsnippet
+
+context "math()"
+snippet í "Iota lower case" iA
+\iota $0
+endsnippet
+
+context "math()"
+snippet ḱ "Kappa lower case" iA
+\kappa $0
+endsnippet
+
+context "math()"
+snippet ĺ "Lambda lower case" iA
+\lambda $0
+endsnippet
+
+context "math()"
+snippet Ĺ "Lambda upper case" iA
+\Lambda $0
+endsnippet
+
+context "math()"
+snippet ḿ "Mu lower case" iA
+\mu $0
+endsnippet
+
+context "math()"
+snippet ń "Nu lower case" iA
+\nu $0
+endsnippet
+
+context "math()"
+snippet ´x "Xi lower case" iA
+\xi $0
+endsnippet
+
+context "math()"
+snippet ´X "Xi upper case" iA
+\Xi $0
+endsnippet
+
+context "math()"
+snippet ṕ "Pi lower case" iA
+\pi $0
+endsnippet
+
+context "math()"
+snippet Ṕ "Pi upper case" iA
+\Pi $0
+endsnippet
+
+context "math()"
+snippet ŕ "Rho lower case" iA
+\rho $0
+endsnippet
+
+context "math()"
+snippet ś "Sigma lower case" iA
+\sigma $0
+endsnippet
+
+context "math()"
+snippet Ś "Sigma upper case" iA
+\Sigma $0
+endsnippet
+
+context "math()"
+snippet ´t "Tau lower case" iA
+\tau $0
+endsnippet
+
+context "math()"
+snippet ú "Úpsilon lower case" iA
+\upsilon $0
+endsnippet
+
+context "math()"
+snippet Ú "Úpsilon upper case" iA
+\Upsilon $0
+endsnippet
+
+context "math()"
+snippet ´f "Phi lower case" iA
+\phi $0
+endsnippet
+
+context "math()"
+snippet ´F "Phi upper case" iA
+\Phi $0
+endsnippet
+
+context "math()"
+snippet ć "Chi lower case" iA
+\chi $0
+endsnippet
+
+context "math()"
+snippet ý "Psi lower case" iA
+\psi $0
+endsnippet
+
+context "math()"
+snippet Ý "Psi upper case" iA
+\Psi $0
+endsnippet
+
+context "math()"
+snippet ẃ "Omega lower case" iA
+\omega $0
+endsnippet
+
+context "math()"
+snippet Ẃ "Omega upper case" iA
+\Omega $0
+endsnippet
+
+# Fuentes y texto
+
+snippet ttbf "Bold" iA
+\textbf{$1}$0
+endsnippet
+
+snippet ttit "Italic" iA
+\textit{$1}$0
+endsnippet
+
+snippet ttun "Underline" iA
+\underline{$1}$0
+endsnippet
+
+context "math()"
+snippet tt "Text inside math mode" iA
+\text{$1}$0
+endsnippet
+
+context "math()"
+snippet "([A-Z])mb" "Math mode bold font" riA
+\mathbb{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet "([A-Z])mc" "Aditional font (math style)" riA
+\mathcal{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet "([A-Z])ms" "Aditional font (math style)" riA
+\mathscr{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+context "math()"
+snippet dstyle "Display math syle inside inline math" iA
+\displaystyle $0
+endsnippet
+
+# Otros
+
+snippet tableofcontents "Table of contents" b
+\tableofcontents
+\newpage $0
+endsnippet
+
+snippet label "Define label on a numbered object" i
+\label{$1}$0
+endsnippet
+
+snippet ref "Reference any defined label" i
+\ref{$1}$0
+endsnippet
+
+context "math()"
+snippet .. "Centered dot." iA
+\cdot $0
+endsnippet
+
+context "math()"
+snippet ldt "Horizontal dots." iA
+\ldots $0
+endsnippet
+
+context "math()"
+snippet vdt "Vertical dots." iA
+\vdots $0
+endsnippet
+
+context "math()"
+snippet ddt "Diagonal dots." iA
+\ddots $0
+endsnippet
+ 
+context "math()"
+snippet tag "Index equation manually" iA
+\tag*{($1)}$0
+endsnippet
+
+# Matrices y tablas
+
+context "math()"
+snippet mat "No border matrix" iA
+\begin{matrix} $1 \end{matrix}$0
+endsnippet
+
+priority 1
+context "math()"
+snippet pmat "Parenthesis matrix" iA
+\begin{pmatrix} $1 \end{pmatrix}$0
+endsnippet
+
+context "math()"
+snippet bmat "Bracket matrix" iA
+\begin{bmatrix} $1 \end{bmatrix}$0
+endsnippet
+
+context "math()"
+snippet Bmat "Brace matrix" iA
+\begin{Bmatrix} $1 \end{Bmatrix}$0
+endsnippet
+
+context "math()"
+snippet vmat "Single pipe matrix" iA
+\begin{vmatrix} $1 \end{vmatrix}$0
+endsnippet
+
+context "math()"
+snippet Vmat "Double pipe matrix" iA
+\begin{Vmatrix} $1 \end{Vmatrix}$0
+endsnippet
+priority 0
+
+priority 1
+context "math()"
+snippet smat "No border small matrix" iA
+\begin{smallmatrix} $1 \end{smallmatrix}$0
+endsnippet
+priority 0
+
+priority 2
+context "math()"
+snippet psmat "Parenthesis small matrix" iA
+\begin{psmallmatrix} $1 \end{psmallmatrix}$0
+endsnippet
+
+context "math()"
+snippet bsmat "Bracket small matrix" iA
+\begin{bsmallmatrix} $1 \end{bsmallmatrix}$0
+endsnippet
+
+context "math()"
+snippet Bsmat "Brace small matrix" iA
+\begin{Bsmallmatrix} $1 \end{Bsmallmatrix}$0
+endsnippet
+
+context "math()"
+snippet vsmat "Single pipe small matrix" iA
+\begin{vmatrix} $1 \end{vmatrix}$0
+endsnippet
+
+context "math()"
+snippet Vsmat "Double pipe small matrix" iA
+\begin{Vsmallmatrix} $1 \end{Vsmallmatrix}$0
+endsnippet
+priority 0
