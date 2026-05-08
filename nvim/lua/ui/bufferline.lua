@@ -240,7 +240,7 @@ vim.o.tabline = "%!v:lua.PoiBufferline.build()"
 
 -- Update bufferline colors on each colorscheme change.
 vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("PoiBufferline", { clear = true }),
+  group = vim.api.nvim_create_augroup("PoiBufferlineHighlights", { clear = true }),
   pattern = "PoiHighlightsReady",
   callback = PoiBufferline.set_colors,
 })
