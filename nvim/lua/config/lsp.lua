@@ -28,7 +28,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     if client.server_capabilities.definitionProvider then
       map("n", "gd", function()
         vim.lsp.buf.definition()
-      end, { buffer = args.buf })
+      end, { buffer = args.buf, unique = false })
     end
 
     -- References highlighting.
