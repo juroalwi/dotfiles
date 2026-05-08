@@ -71,7 +71,19 @@ pick.setup({
 })
 
 pick.registry.files_hidden = function()
-  local command = { "rg", "--files", "--hidden", "--glob", "!.git" }
+  local command = {
+    "rg",
+    "--files",
+    "--hidden",
+    "--no-ignore",
+    "--glob", "!**/.git/*",
+    "--glob", "!**/node_modules/*",
+    "--glob", "!**/dist/*",
+    "--glob", "!**/build/*",
+    "--glob", "!**/coverage/*",
+    "--glob", "!**/.next/*",
+    "--glob", "!**/.cache/*",
+  }
   return pick.builtin.cli({ command = command })
 end
 
