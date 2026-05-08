@@ -32,7 +32,7 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
       { "git", "branch", "--show-current" },
       { text = true },
       function(obj)
-        if obj.code ~= 0 then
+        if obj.code == 0 then
           local branch = obj.stdout:gsub("%s+", "")
           vim.schedule(function()
             vim.b.git_branch = branch ~= "" and branch or nil
