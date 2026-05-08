@@ -6,7 +6,7 @@ require("mason-lspconfig").setup({
       "julials"
     }
   },
-  ensure_installed = { "efm", "copilot", "lua_ls" },
+  ensure_installed = { "efm", "lua_ls" },
 })
 
 vim.lsp.enable("julials")
