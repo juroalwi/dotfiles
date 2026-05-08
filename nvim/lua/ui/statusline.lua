@@ -8,7 +8,7 @@ local M = {}
 M.get_git_status = function()
   local t = {}
   local diff = vim.b.minidiff_summary or {}
-  local branch = vim.fn.system("git branch --show-current 2> /dev/null | tr -d '\n'")
+  local branch = vim.b.git_branch
 
   if branch and branch ~= "" then
     table.insert(t, ("%s %s"):format(icons.git.BRANCH, branch))
@@ -130,7 +130,16 @@ vim.o.statusline = "%!v:lua.PoiStatusline.build()"
 
 -- Update statusline colors on each colorscheme change.
 vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("PoiStatusline", { clear = true }),
+  group = vim.api.nvim_create_augroup("PoiStatuslineHighlights", { clear = true }),
   pattern = "PoiHighlightsReady",
   callback = PoiStatusline.set_colors,
+})
+
+-- Update statusline on each git branch change.
+vim.api.nvim_create_autocmd("User", {
+  group = vim.api.nvim_create_augroup("PoiStatuslineGitBranch", { clear = true }),
+  pattern = "PoiGitBranchReady",
+  callback = function()
+    vim.cmd("redrawstatus")
+  end
 })
