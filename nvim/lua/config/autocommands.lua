@@ -18,3 +18,30 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank()
   end,
 })
+
+-- Update git branch global variable.
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  group = vim.api.nvim_create_augroup("PoiGitBranch", { clear = true }),
+  pattern = "*",
+  callback = function()
+    if vim.bo.buftype ~= "" then -- Omit 'help', 'terminal', 'nofile', 'quickfix', etc.
+      return
+    end
+
+    vim.system(
+      { "git", "branch", "--show-current" },
+      { text = true },
+      function(obj)
+        if obj.code ~= 0 then
+          local branch = obj.stdout:gsub("%s+", "")
+          vim.schedule(function()
+            vim.b.git_branch = branch ~= "" and branch or nil
+            vim.api.nvim_exec_autocmds("User", {
+              pattern = "PoiGitBranchReady",
+            })
+          end)
+        end
+      end
+    )
+  end,
+})
