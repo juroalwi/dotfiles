@@ -5,6 +5,8 @@ pack.add({
   { "neovim/nvim-lspconfig" },
   { "mason-org/mason.nvim",            require = "packages.mason" },
   { "mason-org/mason-lspconfig.nvim" },
+  { "nvimtools/none-ls.nvim",          require = "packages.null-ls" },
+  { "nvimtools/none-ls-extras.nvim" },
   { "saghen/blink.cmp",                require = "packages.blink-cmp" },
   { "saghen/blink.lib" },
   { "windwp/nvim-autopairs",           setup = true },
