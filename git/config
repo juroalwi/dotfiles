@@ -6,7 +6,7 @@
 	name=Julian Alvarez
   email=juroalwi@gmail.com
 [core]
-  sshCommand = "ssh -i ~/.ssh/id_rsa.julian"
+  sshCommand = "ssh -i ~/.ssh/id_ed25519"
 
 ; Xepelin credentials.
 [includeIf "gitdir:~/Desktop/xepelin/**"]
