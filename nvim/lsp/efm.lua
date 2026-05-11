@@ -1,4 +1,4 @@
-local mason = "/home/juroalwi/.local/share/nvim/mason/bin/"
+local mason = "~/.local/share/nvim/mason/bin/"
 
 local prettier = {
   formatStdin = true,
