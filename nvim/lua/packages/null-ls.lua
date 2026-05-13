@@ -1,7 +1,8 @@
 local null_ls = require("null-ls")
 
 null_ls.setup({
-  debug = true,
+  -- debug = true,
+  border = "rounded",
   sources = {
     null_ls.builtins.completion.spell,
     null_ls.builtins.formatting.prettierd,
