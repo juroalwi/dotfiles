@@ -27,7 +27,7 @@ files.setup({
 local custom_go_in_plus = function() -- Behaves exactly the same as default, but executes trim_left on directories.
   local type = (files.get_fs_entry() or {}).fs_type
   if type == nil then
-    return
+    return vim.notify("Cursor is not on valid entry")
   end
   if type == "file" then
     files.go_in()
@@ -46,12 +46,11 @@ end
 local update_cwd = function()
   local path = (files.get_fs_entry() or {}).path
   if path == nil then
-    vim.notify("Cursor is not on valid entry")
-  else
-    local dir = vim.fs.dirname(path)
-    vim.fn.chdir(dir)
-    vim.notify("Working directory updated to: " .. dir)
+    return vim.notify("Cursor is not on valid entry")
   end
+  local dir = vim.fs.dirname(path)
+  vim.fn.chdir(dir)
+  vim.notify("Working directory updated to: " .. dir)
 end
 
 local open_ui = function()
@@ -60,6 +59,15 @@ local open_ui = function()
     return vim.notify("Cursor is not on valid entry")
   end
   vim.ui.open(vim.fs.dirname(path))
+end
+
+local copy_path = function()
+  local path = (files.get_fs_entry() or {}).path
+  if path == nil then
+    return vim.notify("Cursor is not on valid entry")
+  end
+  vim.fn.setreg("+", path)
+  vim.notify("Copied path: " .. path)
 end
 
 local show_dotfiles = true
@@ -81,6 +89,7 @@ vim.api.nvim_create_autocmd("User", {
     map("n", "gr", custom_reveal_cwd, { buffer = buf_id, nowait = true })
     map("n", "gu", update_cwd, { buffer = buf_id })
     map("n", "go", open_ui, { buffer = buf_id })
+    map("n", "gp", copy_path, { buffer = buf_id })
     map("n", "g.", toggle_dotfiles, { buffer = buf_id })
   end,
 })
