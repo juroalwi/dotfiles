@@ -7,5 +7,11 @@ require("mason-lspconfig").setup({
       "efm",     -- Already using none-ls, do not auto enable efm.
     }
   },
-  ensure_installed = { "lua_ls" },
+  ensure_installed = {
+    "lua_ls",
+    "ts_ls",
+    "html",
+    "cssls",
+    "efm"
+  },
 })
