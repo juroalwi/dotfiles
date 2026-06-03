@@ -95,6 +95,43 @@ map("n", "<LEADER>s", function()
   vim.cmd("Pick grep_live")
 end, { noremap = true, silent = true, unique = true })
 
+local function is_test_file(path)
+  return path:match("%.test%.") ~= nil
+      or path:match("%.spec%.") ~= nil
+      or path:match("/__tests__/") ~= nil
+end
+
+vim.api.nvim_create_autocmd("User", {
+  group = vim.api.nvim_create_augroup("PoiMiniPick", { clear = true }),
+  pattern = "MiniPickMatch",
+  callback = function()
+    local matches = pick.get_picker_matches()
+
+    if not matches or not matches.all_inds then return end
+
+    local result = {}
+    local tests = {}
+    local non_tests = {}
+
+    for i, idx in ipairs(matches.all_inds) do
+      local item = matches.all[i]
+      local path = type(item) == "string" and item or tostring(item)
+      if is_test_file(path) then
+        tests[#tests + 1] = idx
+      else
+        non_tests[#non_tests + 1] = idx
+      end
+    end
+
+    if #tests == 0 then return end
+
+    for _, v in ipairs(non_tests) do result[#result + 1] = v end
+    for _, v in ipairs(tests) do result[#result + 1] = v end
+
+    pick.set_picker_match_inds(result)
+  end,
+})
+
 vim.api.nvim_create_autocmd("User", {
   group = vim.api.nvim_create_augroup("PoiMiniPickHighlights", { clear = true }),
   pattern = "PoiHighlightsReady",
