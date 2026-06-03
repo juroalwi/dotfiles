@@ -12,6 +12,5 @@ require("mason-lspconfig").setup({
     "ts_ls",
     "html",
     "cssls",
-    "efm"
   },
 })
