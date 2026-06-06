@@ -1,0 +1,44 @@
+[
+  {
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+    },
+  },
+  {
+    "context": "!Editor",
+    "bindings": {
+      "h": "menu::Cancel",
+      "k": "menu::SelectPrevious",
+      "j": "menu::SelectNext",
+      "l": "menu::Confirm",
+    },
+  },
+  {
+    "context": "VimControl",
+    "bindings": {
+      "ctrl-w": "pane::CloseActiveItem",
+      "ctrl-b": "workspace::ToggleLeftDock",
+      "tab": "pane::ActivateNextItem",
+      "shift-tab": "pane::ActivatePreviousItem",
+      "space s": "zed::OpenSettingsFile",
+      "space k": "zed::OpenKeymapFile",
+      // "space p": "editor::Format",
+      // "space q": "editor::ToggleCodeActions",
+      // "space f": "file_finder::Toggle",
+      // "space w": "pane::DeploySearch",
+      // "space e": "project_panel::ToggleFocus",
+      // "space g": "git_panel::ToggleFocus",
+      // "space t": "terminal_panel::ToggleFocus",
+      // "space a": "agent::ToggleFocus",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
+    "bindings": {
+      "p": ["vim::Paste", { "preserveClipboard": true }],
+    },
+  },
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+    },
+  },
+  {
+    "context": "!Editor",
+    "bindings": {
+      "h": "menu::Cancel",
+      "k": "menu::SelectPrevious",
+      "j": "menu::SelectNext",
+      "l": "menu::Confirm",
+    },
+  },
+  {
+    "context": "VimControl",
+    "bindings": {
+      "ctrl-w": "pane::CloseActiveItem",
+      "ctrl-b": "workspace::ToggleLeftDock",
+      "H": "pane::ActivatePreviousItem",
+      "L": "pane::ActivateNextItem",
+      "space s": "zed::OpenSettingsFile",
+      "space k": "zed::OpenKeymapFile",
+    },
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-alt-v": "workspace::ToggleBottomDock",
+      "ctrl-shift-t": "terminal_panel::ToggleFocus",
+      "ctrl-shift-a": "agent::AddSelectionToThread",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
+    "bindings": {
+      "p": ["vim::Paste", { "preserve_clipboard": true }],
+    },
+  },
+]

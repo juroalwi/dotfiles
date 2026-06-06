@@ -1,0 +1,124 @@
+{
+  // ######## ui ########
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "agent": {
+    "dock": "right",
+    "default_profile": "write",
+    "tool_permissions": {
+      "tools": {
+        "fetch": {
+          "default": "allow",
+        },
+      },
+    },
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "claude-sonnet-4-6",
+      "enable_thinking": true,
+      "effort": "high",
+    },
+    "favorite_models": [],
+    "model_parameters": [],
+  },
+  "theme": "Gruvbox Dark",
+  "icon_theme": "Material Icon Theme",
+  "relative_line_numbers": "enabled",
+  "cursor_blink": false,
+  "ui_font_size": 16,
+  "buffer_font_size": 16,
+
+  // ######## buttons and menus ########
+  "scrollbar": { "show": "never" },
+  "toolbar": { "quick_actions": false },
+  // "title_bar": {
+  //   "show_user_menu": false,
+  //   "show_user_picture": false,
+  // },
+  "tab_bar": {
+    "show_nav_history_buttons": false,
+    "show_tab_bar_buttons": false,
+  },
+  "search": { "button": false },
+  "project_panel": { "dock": "left",
+                     "button": false },
+  "git_panel": { "dock": "left",
+                 "sort_by_path": true, "button": false },
+
+  // ######## editor ########
+  "format_on_save": "on",
+  "current_line_highlight": "none",
+
+  "session": {
+    "restore_unsaved_buffers": true,
+    "trust_all_worktrees": true,
+  },
+
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+  },
+
+  "vim_mode": true,
+
+  "diagnostics": {
+    "inline": { "enabled": true, "update_debounce_ms": 150 },
+  },
+
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+      },
+    },
+    "eslint": {
+      "settings": { "lint": { "suggestCanonicalClasses": "ignore" } },
+    },
+    "tailwindcss-language-server": {
+      "settings": {
+        "classFunctions": ["cva", "cx"],
+        "experimental": {
+          "classRegex": ["[cls|className]\\s\\:\\=\\s\"([^\"]*)"],
+        },
+        "lint": {
+          "suggestCanonicalClasses": "ignore",
+        },
+      },
+    },
+  },
+
+  "prettier": {
+    "plugins": ["prettier-plugin-tailwindcss"],
+    "allowed": true,
+  },
+
+  "languages": {
+    "CSS": {
+      "language_servers": [
+        "tailwindcss-intellisense-css",
+        "!vscode-css-language-server",
+      ],
+    },
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
+      },
+    },
+  },
+}
