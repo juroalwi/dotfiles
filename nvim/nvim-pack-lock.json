@@ -29,6 +29,10 @@
       "rev": "ab11575a6c147ecfba894d676d0c93e855021d34",
       "src": "https://github.com/nvim-mini/mini.diff"
     },
+    "mini.extra": {
+      "rev": "ffb7b3a726e059b011b3655f26e61ec6f7cf5b84",
+      "src": "https://github.com/nvim-mini/mini.extra"
+    },
     "mini.files": {
       "rev": "3e247eb12ca8c05622ceb8745f9004f761b22ef8",
       "src": "https://github.com/nvim-mini/mini.files"
