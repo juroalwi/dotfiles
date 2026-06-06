@@ -11,12 +11,12 @@ blink.setup({
     ["<CR>"] = { "accept", "fallback" },
     ["<TAB>"] = { "select_next", "fallback" },
     ["<S-TAB>"] = { "select_prev", "fallback" },
-    ["<C-SPACE>"] = { "show" },
-    ["<C-h>"] = { "hide" }, -- Works as <C-BS>.
-    ["<C-b>"] = { "scroll_documentation_down" },
-    ["<C-f>"] = { "scroll_documentation_up" },
+    ["<C-h>"] = { "hide" },
     ["<C-j>"] = { "snippet_forward" },
     ["<C-k>"] = { "snippet_backward" },
+    ["<C-l>"] = { "show" },
+    ["<C-f>"] = { "scroll_documentation_down" },
+    ["<C-b>"] = { "scroll_documentation_up" },
   },
   appearance = {
     kind_icons = {
@@ -52,8 +52,8 @@ blink.setup({
     accept = { auto_brackets = { enabled = true } },
     list = {
       selection = {
-        preselect = true,   -- When `true`, will automatically select the first item in the completion list
-        auto_insert = true, -- When `true`, inserts the completion item automatically when selecting it
+        preselect = false,  -- When `true`, will automatically select the first item in the completion list.
+        auto_insert = true, -- When `true`, inserts the completion item automatically when selecting it.
       },
     },
     documentation = {
@@ -83,15 +83,16 @@ blink.setup({
     enabled = true,
     keymap = {
       ["<CR>"] = { "accept_and_enter", "fallback" },
-      ["<C-h>"] = { "hide" }, -- Works as <C-BS>.
+      ["<C-h>"] = { "hide" },
+      ["<C-l>"] = { "show" },
     },
     completion = {
       menu = { auto_show = true },
       ghost_text = { enabled = true },
       list = {
         selection = {
-          preselect = false,  -- When `true`, will automatically select the first item in the completion list
-          auto_insert = true, -- When `true`, inserts the completion item automatically when selecting it
+          preselect = false,  -- When `true`, will automatically select the first item in the completion list.
+          auto_insert = true, -- When `true`, inserts the completion item automatically when selecting it.
         },
       },
     },
@@ -100,15 +101,16 @@ blink.setup({
     enabled = true,
     keymap = {
       ["<CR>"] = { "accept", "fallback" },
-      ["<C-h>"] = { "hide" }, -- Works as <C-BS>.
+      ["<C-h>"] = { "hide" },
+      ["<C-l>"] = { "show" },
     },
     completion = {
       menu = { auto_show = true },
       ghost_text = { enabled = true },
       list = {
         selection = {
-          preselect = false,  -- When `true`, will automatically select the first item in the completion list
-          auto_insert = true, -- When `true`, inserts the completion item automatically when selecting it
+          preselect = false,  -- When `true`, will automatically select the first item in the completion list.
+          auto_insert = true, -- When `true`, inserts the completion item automatically when selecting it.
         },
       },
     },
