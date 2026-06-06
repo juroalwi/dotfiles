@@ -11,6 +11,7 @@ pack.add({
   { "saghen/blink.lib" },
   { "windwp/nvim-autopairs",           setup = true },
   { "windwp/nvim-ts-autotag",          setup = true },
+  { "nvim-mini/mini.extra",            setup = true },
   { "nvim-mini/mini.icons",            setup = true },
   { "nvim-mini/mini.indentscope",      setup = true },
   { "nvim-mini/mini.comment",          setup = true },
