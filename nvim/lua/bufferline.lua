@@ -7,10 +7,10 @@ local has_tablineat = vim.fn.has("tablineat")
 local M = {}
 
 -- State.
-local buffers = {}          -- Properties for each buffer (label, highlighting, etc.).
-local viewport_buffers = {} -- Properties for each viewport buffer (label, highlighting, etc.).
-local tabs = ""             -- String for tabs.
-local config = {
+M.buffers = {}          -- Each opened buffer with its UI properties (label, highlighting, etc.).
+M.viewport_buffers = {} -- Each displayed buffer with its UI properties (label, highlighting, etc.).
+M.tabs = ""             -- String for tabs.
+M.config = {
   disabled = false,
   tabpage_section_position = "right", -- Where to show tabpage section in case of multiple vim tabpages. One of 'left', 'right', 'none'.
 }
@@ -18,14 +18,14 @@ local config = {
 M.update_tabs_section = function()
   local tabs_amount = vim.fn.tabpagenr("$")
   if tabs_amount == 1 or PoiBufferline.config.tabpage_section_position == "none" then
-    tabs = ""
+    M.tabs = ""
   else
-    tabs = string.format(" %s/%s ", vim.fn.tabpagenr(), tabs_amount)
+    M.tabs = string.format(" %s/%s ", vim.fn.tabpagenr(), tabs_amount)
   end
 end
 
 M.update_buffers_section = function()
-  buffers = {}
+  M.buffers = {}
   local current_buffer_id = vim.api.nvim_get_current_buf()
   for _, buffer_id in ipairs(vim.api.nvim_list_bufs()) do
     if vim.bo[buffer_id].buflisted then
@@ -63,7 +63,7 @@ M.update_buffers_section = function()
         highlight = "PoiBufferlineHidden"
       end
       buffer["hl"] = string.format("%%#%s#", highlight)
-      table.insert(buffers, buffer)
+      table.insert(M.buffers, buffer)
     end
   end
 end
@@ -82,7 +82,7 @@ M.format_buffers_labels = function()
   while keep_running do
     keep_running = false
     for _, buffer_index in ipairs(repeated_label_buffer_indexes) do
-      local buffer = buffers[buffer_index]
+      local buffer = M.buffers[buffer_index]
       local old_label = buffer.label
       local new_label = M.extend_label(buffer.path, buffer.label)
       if old_label ~= new_label then
@@ -95,7 +95,7 @@ M.format_buffers_labels = function()
   end
 
   -- Add padding and modified status.
-  for _, buffer in ipairs(buffers) do
+  for _, buffer in ipairs(M.buffers) do
     if vim.bo[buffer.id].modified then
       buffer.label = string.format(" %s %s ", buffer.label, icons.file.MODIFIED)
     else
@@ -106,7 +106,7 @@ end
 
 M.get_repeated_label_buffer_indexes = function()
   local label_buffer_indexes = {}
-  for index, buffer in ipairs(buffers) do
+  for index, buffer in ipairs(M.buffers) do
     local label = buffer.label
     if label_buffer_indexes[label] == nil then
       label_buffer_indexes[label] = { index }
@@ -114,9 +114,7 @@ M.get_repeated_label_buffer_indexes = function()
       table.insert(label_buffer_indexes[label], index)
     end
   end
-  return vim.iter(vim.tbl_filter(function(x)
-        return #x > 1
-      end, label_buffer_indexes))
+  return vim.iter(vim.tbl_filter(function(x) return #x > 1 end, label_buffer_indexes))
       :flatten()
       :totable()
 end
@@ -139,7 +137,7 @@ M.fit_viewport = function()
   -- Register each buffer length and position.
   local offset = 0
   local bufferline_total_length = 0
-  for _, buffer in ipairs(buffers) do
+  for _, buffer in ipairs(M.buffers) do
     buffer.length = vim.api.nvim_strwidth(buffer.label)
     buffer.position = bufferline_total_length + 1
     bufferline_total_length = bufferline_total_length + buffer.length
@@ -151,7 +149,7 @@ M.fit_viewport = function()
   -- Compute viewport interval.
   local viewport_left
   local viewport_right
-  local viewport_length = vim.o.columns - vim.api.nvim_strwidth(tabs)
+  local viewport_length = vim.o.columns - vim.api.nvim_strwidth(M.tabs)
   local half_viewport_length = math.floor(0.5 * viewport_length)
   if offset + half_viewport_length <= bufferline_total_length then
     viewport_left = offset - half_viewport_length
@@ -165,10 +163,10 @@ M.fit_viewport = function()
 end
 
 M.truncate_bufferline = function(viewport_interval)
-  viewport_buffers = {}
+  M.viewport_buffers = {}
   local viewport_left, viewport_right = viewport_interval[1], viewport_interval[2]
 
-  for _, buffer in ipairs(buffers) do
+  for _, buffer in ipairs(M.buffers) do
     local buffer_left = buffer.position
     local buffer_right = buffer.position + buffer.length - 1
     if (buffer_right >= viewport_left) and (buffer_left <= viewport_right) then
@@ -176,29 +174,29 @@ M.truncate_bufferline = function(viewport_interval)
       local left_cut_amount = math.max(0, viewport_left - buffer_left)
       local right_cut_amount = math.max(0, buffer_right - viewport_right)
       buffer.label = vim.fn.strcharpart(buffer.label, left_cut_amount, buffer.length - right_cut_amount)
-      table.insert(viewport_buffers, buffer)
+      table.insert(M.viewport_buffers, buffer)
     end
   end
 end
 
 M.build = function()
   local b = {}
-  for _, buffer in ipairs(viewport_buffers) do
+  for _, buffer in ipairs(M.viewport_buffers) do
     -- Escape '%' in labels.
-    table.insert(b, ("%s%s%s"):format(buffer.hl, buffer.click_handler, buffer.label:gsub("%%", "%%%%")))
+    table.insert(b, string.format("%s%s%s", buffer.hl, buffer.click_handler, string.gsub(buffer.label, "%%", "%%%%")))
   end
 
   -- Usage of `%X` makes filled space to the right 'non-clickable'.
-  local result = ("%s%%X%%#PoiBufferlineFill#"):format(table.concat(b, ""))
+  local result = string.format("%s%%X%%#PoiBufferlineFill#", table.concat(b, ""))
 
-  if tabs ~= "" then
+  if M.tabs ~= "" then
     local position = PoiBufferline.config.tabpage_section_position
     if position == "left" then
-      result = ("%%#PoiBufferlineTab#%s%s"):format(tabs, result)
+      result = string.format("%%#PoiBufferlineTab#%s%s", M.tabs, result)
     end
     if position == "right" then
       -- Use `%=` to make it stick to right hand side.
-      result = ("%s%%=%%#PoiBufferlineTab#%s"):format(result, tabs)
+      result = string.format("%s%%=%%#PoiBufferlineTab#%s", result, M.tabs)
     end
   end
 
@@ -206,7 +204,7 @@ M.build = function()
 end
 
 PoiBufferline = {
-  config = config,
+  config = M.config,
   set_colors = function()
     link("TabLine", "Normal")
     link("TabLineFill", "Normal")
@@ -215,10 +213,10 @@ PoiBufferline = {
     copy("PoiBufferlineCurrent", "PoiAccent", { bold = true, italic = true })
     copy("PoiBufferlineVisible", "PoiAccent")
     copy("PoiBufferlineHidden", "PoiMute")
-    copy("PoiBufferlineTab", "PoiText")
+    copy("PoiBufferlineTab", "PoiMute")
   end,
   build = function()
-    if config.disabled then
+    if M.config.disabled then
       return ""
     end
     M.update_tabs_section()

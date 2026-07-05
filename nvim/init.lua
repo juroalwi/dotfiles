@@ -3,8 +3,8 @@ vim.g.mapleader = " "
 require("vim._core.ui2").enable({})
 
 require("packages")
-require("ui.bufferline")
-require("ui.statusline")
+require("bufferline")
+require("statusline")
 require("config.options")
 require("config.keymaps")
 require("config.autocommands")
