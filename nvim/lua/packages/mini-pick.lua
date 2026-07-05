@@ -63,7 +63,7 @@ pick.setup({
     config = function()
       return { width = vim.o.columns }
     end,
-    prompt_prefix = " ",
+    prompt_prefix = "❯ ",
   },
 })
 
