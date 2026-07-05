@@ -10,7 +10,7 @@ M.add = function(packages)
 
     if v.setup then
       table.insert(setups, {
-        path = v[1]:match("[^/]+/(.*)"),
+        path = string.match(v[1], "[^/]+/(.*)"),
         opts = type(v.setup) == "table" and v.setup or {},
       })
     end
@@ -25,13 +25,13 @@ M.add = function(packages)
   for _, v in ipairs(setups) do
     local ok, mod = pcall(require, v.path)
     if not ok then
-      ok, mod = pcall(require, v.path:gsub("%.nvim$", ""):gsub("-nvim$", ""))
+      ok, mod = pcall(require, string.gsub(v.path, "[.-]nvim$", ""))
     end
 
     if ok then
       mod.setup(v.opts)
     else
-      vim.notify("Failed to load package" .. v.path, vim.log.levels.ERR)
+      vim.notify("Failed to load package" .. v.path, vim.log.levels.ERROR)
     end
   end
 
@@ -42,12 +42,8 @@ end
 
 M.clean = function()
   local inactive_packages = vim.iter(vim.pack.get())
-      :filter(function(x)
-        return not x.active
-      end)
-      :map(function(x)
-        return x.spec.name
-      end)
+      :filter(function(x) return not x.active end)
+      :map(function(x) return x.spec.name end)
       :totable()
   vim.pack.del(inactive_packages)
 end
