@@ -34,13 +34,13 @@ pick.setup({
     custom_move_down = {
       char = "<C-n>",
       func = function()
-        vim.api.nvim_feedkeys(vim.keycode("<TAB>", true, true, true), "n", false)
+        vim.api.nvim_feedkeys(vim.keycode("<TAB>"), "n", false)
       end,
     },
     custom_move_up   = {
       char = "<C-p>",
       func = function()
-        vim.api.nvim_feedkeys(vim.keycode("<S-TAB>", true, true, true), "n", false)
+        vim.api.nvim_feedkeys(vim.keycode("<S-TAB>"), "n", false)
       end,
     },
 
