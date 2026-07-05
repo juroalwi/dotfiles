@@ -18,8 +18,12 @@ end
 M.copy = function(from, to, opts)
   local fg, bg = nil, nil
   if type(to) == "table" then
-    fg = to.fg and M.get(to.fg[1])[to.fg[2]] or nil
-    bg = to.bg and M.get(to.bg[1])[to.bg[2]] or nil
+    if type(to.fg) == "table" and #to.fg == 2 then
+      fg = M.get(to.fg[1])[to.fg[2]]
+    end
+    if type(to.bg) == "table" and #to.bg == 2 then
+      bg = M.get(to.bg[1])[to.bg[2]]
+    end
   else
     local hl = M.get(to)
     fg = hl.fg
