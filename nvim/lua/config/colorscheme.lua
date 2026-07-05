@@ -1,21 +1,6 @@
-local link = require("utils.highlights").link
 local copy = require("utils.highlights").copy
 
 local update_highlights = function()
-  -- Floating windows.
-  link("NormalFloat", "Normal")
-  link("FloatBorder", "Normal")
-  link("FloatTitle", "Normal")
-  link("FloatFooter", "Normal")
-  link("FloatShadow", "Normal")
-  link("FloatShadowThrough", "Normal")
-
-  -- Popup menu.
-  link("Pmenu", "Normal")
-  link("PmenuBorder", "Normal")
-  link("PmenuExtra", "Normal")
-  link("PmenuKind", "Normal")
-
   -- Custom color groups.
   copy("PoiMute", "Conceal")
   copy("PoiAccent", "Special")

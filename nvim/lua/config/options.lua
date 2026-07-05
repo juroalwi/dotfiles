@@ -33,7 +33,7 @@ vim.o.scrolloff = 8      -- Minimum number of screen lines to keep above and bel
 vim.o.sidescrolloff = 16 -- Minimum number of screen columns to keep to the left and right of the cursor when scrolling horizontally.
 
 -- UI.
-vim.o.winborder = "rounded"
-vim.o.pumborder = "rounded"
+vim.o.winborder = "solid"
+vim.o.pumborder = "solid"
 vim.o.signcolumn = "yes"          -- When 'number', merge sign column into number column.
 vim.opt.fillchars = { eob = " " } -- Character displayed at the end of buffer.

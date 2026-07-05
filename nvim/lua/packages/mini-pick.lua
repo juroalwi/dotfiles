@@ -1,5 +1,4 @@
 local pick = require("mini.pick")
-local link = require("utils.highlights").link
 local map = require("utils.keymaps").map
 
 pick.setup({
@@ -98,9 +97,9 @@ map("n", "<LEADER>f", function()
 end, { noremap = true, silent = true, unique = true })
 
 local function is_test_file(path)
-  return path:match("%.test%.") ~= nil
-      or path:match("%.spec%.") ~= nil
-      or path:match("/__tests__/") ~= nil
+  return string.match(path, "%.test%.") ~= nil
+      or string.match(path, "%.spec%.") ~= nil
+      or string.match(path, "/__tests__/") ~= nil
 end
 
 vim.api.nvim_create_autocmd("User", {
@@ -131,16 +130,5 @@ vim.api.nvim_create_autocmd("User", {
     for _, v in ipairs(tests) do result[#result + 1] = v end
 
     pick.set_picker_match_inds(result)
-  end,
-})
-
-vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("PoiMiniPickHighlights", { clear = true }),
-  pattern = "PoiHighlightsReady",
-  callback = function()
-    link("MiniPickPrompt", "MiniPickNormal")
-    link("MiniPickPromptPrefix", "MiniPickNormal")
-    link("MiniPickPromptCaret", "MiniPickNormal")
-    link("MiniPickBorderText", "MiniPickNormal")
   end,
 })

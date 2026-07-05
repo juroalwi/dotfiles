@@ -1,5 +1,4 @@
 local files = require("mini.files")
-local link = require("utils.highlights").link
 local map = require("utils.keymaps").map
 local unmap = require("utils.keymaps").unmap
 
@@ -97,12 +96,3 @@ vim.api.nvim_create_autocmd("User", {
 map("n", "<LEADER>e", function()
   files.open(vim.api.nvim_buf_get_name(0), false)
 end, { silent = true, noremap = true })
-
-vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("PoiMiniFilesHighlights", { clear = true }),
-  pattern = "PoiHighlightsReady",
-  callback = function()
-    link("MiniFilesTitle", "MiniFilesNormal")
-    link("MiniFilesTitleFocused", "MiniFilesNormal")
-  end,
-})

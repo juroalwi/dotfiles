@@ -6,7 +6,6 @@ vim.diagnostic.config({
     header = "",
     suffix = "",
     scope = "line",
-    border = "rounded",
     source = true,
     severity_sort = true,
   },

@@ -1,5 +1,4 @@
 local blink = require("blink.cmp")
-local link = require("utils.highlights").link
 
 blink.build():wait(60000)
 
@@ -118,12 +117,3 @@ blink.setup({
 })
 
 vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
-
-vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("PoiBlinkCmpHighlights", { clear = true }),
-  pattern = "PoiHighlightsReady",
-  callback = function()
-    link("BlinkCmpMenu", "Pmenu")
-    link("BlinkCmpMenuBorder", "PmenuBorder")
-  end,
-})
