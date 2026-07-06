@@ -1,5 +1,5 @@
 local map = require("utils.keymaps").map
-
+local methods = vim.lsp.protocol.Methods
 local lsp_group = vim.api.nvim_create_augroup("PoiLspSetup", { clear = true })
 local format_group = vim.api.nvim_create_augroup("PoiLspFormat", { clear = true })
 local highlight_group = vim.api.nvim_create_augroup("PoiLspHighlight", { clear = true })
@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local with_mini_pick = function(cmd, fallback)
       return function()
         local ok, mini_extra = pcall(require, "mini.extra")
-        if ok then
+        if false then
           mini_extra.pickers.lsp({ scope = cmd })
         else
           fallback()
@@ -47,33 +47,33 @@ vim.api.nvim_create_autocmd("LspAttach", {
       end
     end
 
-    if client:supports_method("textDocument/definition") then
+    if client:supports_method(methods.textDocument_definition) then
       lsp_map("n", "gd", with_mini_pick("definition", vim.lsp.buf.definition))
     end
 
-    if client:supports_method("textDocument/typeDefinition") then
+    if client:supports_method(methods.textDocument_typeDefinition) then
       lsp_map("n", "gt", with_mini_pick("type_definition", vim.lsp.buf.type_definition))
     end
 
-    if client:supports_method("textDocument/implementation") then
+    if client:supports_method(methods.textDocument_implementation) then
       lsp_map("n", "gi", with_mini_pick("implementation", vim.lsp.buf.implementation))
     end
 
-    if client:supports_method("textDocument/references") then
-      lsp_map("n", "gr", with_mini_pick("references", vim.lsp.buf.references))
+    if client:supports_method(methods.textDocument_references) then
+      lsp_map("n", "gr", with_mini_pick("document_symbol", vim.lsp.buf.references))
     end
 
-    if client:supports_method("textDocument/rename") then
-      lsp_map("n", "gn", vim.lsp.buf.rename)
-    end
-
-    if client:supports_method("textDocument/code_action") then
+    if client:supports_method(methods.textDocument_codeAction) then
       lsp_map("n", "ga", vim.lsp.buf.code_action)
     end
 
-    if client:supports_method("textDocument/formatting") then
-      lsp_map("n", "gq", vim.lsp.buf.format)
-      lsp_map("x", "gq", function()
+    if client:supports_method(methods.textDocument_rename) then
+      lsp_map("n", "<LEADER>ln", vim.lsp.buf.rename)
+    end
+
+    if client:supports_method(methods.textDocument_formatting) then
+      lsp_map("n", "<LEADER>lf", vim.lsp.buf.format)
+      lsp_map("x", "<LEADER>lf", function()
         vim.lsp.buf.format()
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, false, true), "n", true)
       end)
