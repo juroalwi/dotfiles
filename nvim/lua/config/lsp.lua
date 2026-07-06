@@ -4,14 +4,22 @@ local lsp_group = vim.api.nvim_create_augroup("PoiLspSetup", { clear = true })
 local format_group = vim.api.nvim_create_augroup("PoiLspFormat", { clear = true })
 local highlight_group = vim.api.nvim_create_augroup("PoiLspHighlight", { clear = true })
 
-local format_on_save_enabled = false
-map("n", "<LEADER>t", function()
-  format_on_save_enabled = not format_on_save_enabled
-  vim.notify("Format on save " .. (format_on_save_enabled and "enabled" or "disabled"))
+map("n", "<LEADER>ll", function()
+  vim.cmd.tabnew(vim.lsp.log.get_filename())
 end)
 
-map("n", "<LEADER>l", function()
-  vim.cmd.edit(vim.lsp.get_log_path())
+map("n", "<LEADER>lh", function()
+  vim.cmd("checkhealth vim.lsp")
+end)
+
+map("n", "<LEADER>lr", function()
+  vim.cmd("lsp restart")
+end)
+
+local format_on_save_enabled = false
+map("n", "<LEADER>lt", function()
+  format_on_save_enabled = not format_on_save_enabled
+  vim.notify("Format on save " .. (format_on_save_enabled and "enabled" or "disabled"))
 end)
 
 vim.api.nvim_create_autocmd("LspAttach", {
