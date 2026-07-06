@@ -7,7 +7,7 @@ vim.o.wrap = false              -- When true, break long lines and display them 
 vim.o.clipboard = "unnamedplus" -- When "unnamedplus", allow neovim to access the system clipboard.
 
 -- Indentation.
-vim.o.smartindent = false -- When true, auto indentation after '{', before '}' or after any cinword.
+vim.o.smartindent = true -- When true, auto indentation after '{', before '}' or after any cinword.
 vim.o.autoindent = true   -- When true, copy indent from current line when starting a new line.
 vim.o.expandtab = true    -- When true, replace \t characters with spaces.
 vim.o.tabstop = 2         -- How many columns wide is a \t character worth.
