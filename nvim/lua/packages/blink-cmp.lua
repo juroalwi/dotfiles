@@ -1,33 +1,35 @@
 local blink = require("blink.cmp")
 
-blink.build():wait(60000)
-
 blink.setup({
   fuzzy = { implementation = "prefer_rust_with_warning" },
-  signature = { enabled = true },
+  signature = { enabled = true, },
   keymap = {
-    preset = "default",
     ["<CR>"] = { "accept", "fallback" },
     ["<TAB>"] = { "select_next", "fallback" },
     ["<S-TAB>"] = { "select_prev", "fallback" },
     ["<C-h>"] = { "hide" },
-    ["<C-j>"] = { "snippet_forward" },
-    ["<C-k>"] = { "snippet_backward" },
     ["<C-l>"] = { "show" },
-    ["<C-f>"] = { "scroll_documentation_down" },
-    ["<C-b>"] = { "scroll_documentation_up" },
+    ["<C-k>"] = { "snippet_backward" },
+    ["<C-j>"] = { "snippet_forward" },
+    ["<C-f>"] = { "scroll_documentation_down", "scroll_signature_up", "fallback" },
+    ["<C-b>"] = { "scroll_documentation_up", "scroll_signature_down", "fallback" },
+    ["<C-s>"] = { "show_signature", "hide_signature", "fallback" },
   },
   appearance = {
     kind_icons = {
       Keyword = "",
-      Value = "",
       Text = "",
+      Value = "",
       Constant = "󰏿",
+      Variable = "󰫧",
+      Field = "",
+      Function = "󰊕",
+      Method = "",
+      Operator = "𝜓",
       Unit = "󰬺",
       Event = "",
       Snippet = "",
       Color = "",
-      Operator = "",
       TypeParameter = "",
       Interface = "",
       Struct = "󰙅",
@@ -36,15 +38,16 @@ blink.setup({
       Class = "",
       Constructor = "",
       Property = "",
-      Variable = "",
-      Field = "",
-      Function = "",
-      Method = "",
       Module = "",
       Reference = "",
       File = "",
       Folder = "",
     },
+  },
+  sources = {
+    providers = {
+      lsp = { fallbacks = {} }
+    }
   },
   completion = {
     ghost_text = { enabled = true },
@@ -57,15 +60,14 @@ blink.setup({
     },
     documentation = {
       auto_show = true,
-      auto_show_delay_ms = 0,
+      auto_show_delay_ms = 50,
       update_delay_ms = 50,
     },
     menu = {
-      border = "rounded",
       auto_show = true,
       auto_show_delay_ms = 0,
       draw = {
-        columns = { { "kind_icon", "label", "label_description", gap = 2 } },
+        columns = { { "kind_icon", "label", "source_name", gap = 2 } },
         components = {
           source_name = {
             width = { max = 30 },
