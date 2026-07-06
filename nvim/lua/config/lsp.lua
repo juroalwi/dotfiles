@@ -72,7 +72,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     -- Format on save.
-    if client.server_capabilities.documentFormattingProvider then
+    if client:supports_method(methods.textDocument_formatting) then
+      vim.api.nvim_clear_autocmds({
+        group = format_group,
+        buffer = args.buf,
+      })
       vim.api.nvim_create_autocmd("BufWritePre", {
         group = format_group,
         buffer = args.buf,
@@ -89,11 +93,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     -- References highlighting.
-    if client.server_capabilities.documentHighlightProvider then
+    if client:supports_method(methods.textDocument_documentHighlight) then
+      vim.api.nvim_clear_autocmds({
+        group = highlight_group,
+        buffer = args.buf,
+      })
       vim.api.nvim_create_autocmd("CursorHold", {
         group = highlight_group,
         buffer = args.buf,
-        callback = vim.lsp.buf.document_highlight,
+        callback = vim.lsp.buf.document_highlight
       })
       vim.api.nvim_create_autocmd("CursorMoved", {
         group = highlight_group,
