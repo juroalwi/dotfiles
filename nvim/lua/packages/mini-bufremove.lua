@@ -1,7 +1,7 @@
 local bufremove = require("mini.bufremove")
 local map = require("utils.keymaps").map
 
-local disabled = { "fugitive", "fugitiveblame" }
+local disabled = { "fugitive", "fugitiveblame", "qf" }
 
 local includes = function(t, e)
   for _, v in ipairs(t) do
