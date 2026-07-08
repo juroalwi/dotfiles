@@ -5,38 +5,38 @@ M.add = function(packages)
   local setups = {}
   local requirements = {}
 
-  for _, v in ipairs(packages) do
-    table.insert(urls, { src = "https://github.com/" .. v[1], name = v.name, version = v.version })
+  for _, p in ipairs(packages) do
+    table.insert(urls, { src = "https://github.com/" .. p[1], name = p.name, version = p.version })
 
-    if v.setup then
+    if p.setup then
       table.insert(setups, {
-        path = string.match(v[1], "[^/]+/(.*)"),
-        opts = type(v.setup) == "table" and v.setup or {},
+        path = string.match(p[1], "[^/]+/(.*)"),
+        opts = type(p.setup) == "table" and p.setup or {},
       })
     end
 
-    if v.require then
-      table.insert(requirements, v.require)
+    if p.require then
+      table.insert(requirements, p.require)
     end
   end
 
   vim.pack.add(urls)
 
-  for _, v in ipairs(setups) do
-    local ok, mod = pcall(require, v.path)
+  for _, s in ipairs(setups) do
+    local ok, mod = pcall(require, s.path)
     if not ok then
-      ok, mod = pcall(require, string.gsub(v.path, "[.-]nvim$", ""))
+      ok, mod = pcall(require, string.gsub(s.path, "[.-]nvim$", ""))
     end
 
     if ok then
-      mod.setup(v.opts)
+      mod.setup(s.opts)
     else
-      vim.notify("Failed to load package" .. v.path, vim.log.levels.ERROR)
+      vim.notify("Failed to load package" .. s.path, vim.log.levels.ERROR)
     end
   end
 
-  for _, v in ipairs(requirements) do
-    require(v)
+  for _, r in ipairs(requirements) do
+    require("packages." .. r)
   end
 end
 
