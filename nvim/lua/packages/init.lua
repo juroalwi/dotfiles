@@ -15,6 +15,7 @@ pack.add({
   { "nvim-mini/mini.pairs",            setup = true },
   { "nvim-mini/mini.comment",          setup = true },
   { "nvim-mini/mini.indentscope",      setup = true },
+  { "nvim-mini/mini.bufremove",        require = "mini-bufremove" },
   { "nvim-mini/mini.files",            require = "mini-files" },
   { "nvim-mini/mini.pick",             require = "mini-pick" },
   { "nvim-mini/mini.diff",             require = "mini-diff" },

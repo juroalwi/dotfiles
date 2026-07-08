@@ -1,10 +1,9 @@
 local map = require("utils.keymaps").map
 
-map({ "x", "i" }, "<C-c>", "<ESC>") -- Make <C-c> behave as  <ESC>.
-map("n", "<C-s>", ":w<CR>")         -- Write file.
-map("n", "<C-q>", ":bd<CR>")        -- Quit buffer.
-map("n", "<LEADER>n", ":noh<CR>")   -- Clear highlighted text from last search.
-map("n", "<LEADER>m", ":messages<CR>")
+map({ "x", "i" }, "<C-c>", "<ESC>")              -- Make <C-c> behave as  <ESC>.
+map("n", "<C-s>", ":w<CR>")                      -- Write file.
+map("n", "<LEADER>n", ":noh<CR>")                -- Clear highlighted text from last search.
+map("n", "<LEADER>m", ":messages<CR>")           -- Show messages list.
 
 -- Open Neovim directories.
 map("n", "<LEADER>vc", ":e " .. vim.fn.stdpath("config") .. "<CR>") -- Open root configuration file.

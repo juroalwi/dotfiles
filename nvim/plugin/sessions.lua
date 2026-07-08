@@ -13,8 +13,8 @@ map("n", "<LEADER>r", function()
   vim.cmd("restart")
 end)
 vim.api.nvim_create_autocmd("VimEnter", {
-  group = vim.api.nvim_create_augroup("PoiRestartSession", { clear = true }),
   nested = true,
+  group = vim.api.nvim_create_augroup("PoiRestartSession", { clear = true }),
   callback = function()
     if vim.fn.filereadable(restore_session_file) == 1 then
       vim.cmd("silent! source " .. restore_session_file)
